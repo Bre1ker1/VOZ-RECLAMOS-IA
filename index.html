@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voz Reclamos IA - Prototipo Vecino</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- CSS del Mapa Interactivo Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+  <!-- Header / Navbar -->
+  <header class="navbar">
+    <div class="logo-container">
+      <img src="logo.png" alt="Logo Voz Reclamos" class="app-logo" id="app-logo-img" onerror="this.style.display='none'; document.getElementById('logo-placeholder-icon').style.display='inline-block';">
+      <i class="fa-solid fa-bullhorn logo-icon" id="logo-placeholder-icon" style="display: none;"></i>
+      <span class="brand-name">Voz <strong>Reclamos</strong> <small class="ai-tag">IA</small></span>
+    </div>
+    <div class="user-status" id="user-status">
+      <button id="btn-ver-mis-reclamos" class="btn-sm btn-secondary hidden"><i class="fa-solid fa-user"></i> Mis Reclamos</button>
+      <button id="btn-ver-comunidad" class="btn-sm btn-secondary hidden"><i class="fa-solid fa-earth-americas"></i> Reclamos Vecinales</button>
+      <span id="user-display"><i class="fa-solid fa-user-circle"></i> No autenticado</span>
+      <button id="btn-logout" class="btn-sm hidden"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- PANTALLA 1: AUTENTICACIÓN -->
+    <section id="sec-auth" class="card active">
+      <div class="auth-tabs">
+        <button id="tab-login" class="btn-tab active"><i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión</button>
+        <button id="tab-register" class="btn-tab"><i class="fa-solid fa-user-plus"></i> Registrarse</button>
+      </div>
+
+      <form id="form-login" class="auth-form">
+        <h2><i class="fa-solid fa-user-check"></i> Acceso de Vecino</h2>
+        <p class="subtitle">Ingresá con tu DNI para gestionar y apoyar reclamos.</p>
+        <div class="form-group">
+          <label for="login-dni">DNI (Número de Documento)</label>
+          <input type="number" id="login-dni" placeholder="Ej: 46868103" required>
+        </div>
+        <div class="form-group">
+          <label for="login-pass">Contraseña</label>
+          <input type="password" id="login-pass" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-arrow-right-to-bracket"></i> Entrar a la App</button>
+      </form>
+
+      <form id="form-register" class="auth-form hidden">
+        <h2><i class="fa-solid fa-address-card"></i> Registro de Nuevo Usuario</h2>
+        <p class="subtitle">Tus datos garantizan la regla 1 DNI = 1 Reclamo / Apoyo verificado.</p>
+        <div class="form-group">
+          <label for="reg-dni">DNI (Número de Documento)</label>
+          <input type="number" id="reg-dni" placeholder="Ej: 46868103" required>
+        </div>
+        <div class="form-group">
+          <label for="reg-email">Correo Electrónico</label>
+          <input type="email" id="reg-email" placeholder="ejemplo@correo.com" required>
+        </div>
+        <div class="form-group">
+          <label for="reg-tel">Teléfono de Contacto</label>
+          <input type="tel" id="reg-tel" placeholder="Ej: 2615551234" required>
+        </div>
+        <div class="form-group">
+          <label for="reg-pass">Crear Contraseña</label>
+          <input type="password" id="reg-pass" placeholder="Mínimo 6 caracteres" minlength="6" required>
+        </div>
+        <button type="submit" class="btn btn-success"><i class="fa-solid fa-user-plus"></i> Crear Mi Cuenta</button>
+      </form>
+    </section>
+
+    <!-- PANTALLA PRINCIPAL: MIS RECLAMOS -->
+    <section id="sec-historial" class="card hidden">
+      <div class="section-header">
+        <h2><i class="fa-solid fa-list-check"></i> Mis Reclamos Registrados</h2>
+        <button id="btn-nuevo" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Crear Otro Reclamo</button>
+      </div>
+
+      <div id="lista-reclamos" class="reclamos-list">
+        <!-- Cargados dinámicamente -->
+      </div>
+    </section>
+
+    <!-- PANTALLA: RECLAMOS DE OTROS VECINOS EN LUJÁN DE CUYO CON BOTÓN DE APOYO -->
+    <section id="sec-comunidad" class="card hidden">
+      <div class="section-header">
+        <h2><i class="fa-solid fa-earth-americas"></i> Reclamos Vecinales en Luján de Cuyo</h2>
+      </div>
+      <p class="subtitle">Explorá los reclamos de otros vecinos y sumá tu apoyo para darle prioridad comunitaria.</p>
+      
+      <!-- Contenedor del Mapa Comunitario -->
+      <div id="mapa-comunidad-container" class="mapa-box-lg"></div>
+
+      <div id="lista-comunidad" class="reclamos-list" style="margin-top: 20px;">
+        <!-- Reclamos globales cargados dinámicamente -->
+      </div>
+    </section>
+
+    <!-- PANTALLA 2: NUEVO RECLAMO Y MAPA -->
+    <section id="sec-crear" class="card hidden">
+      <h2><i class="fa-solid fa-camera"></i> Nuevo Reclamo Vecinal</h2>
+      <p class="subtitle">Marcá la falla únicamente dentro del perímetro delineado de Luján de Cuyo.</p>
+
+      <div class="step-box">
+        <button id="btn-gps" class="btn btn-secondary"><i class="fa-solid fa-map-location-dot"></i> Cargar Jurisdicción Luján de Cuyo</button>
+        
+        <div id="gps-info" class="info-badge hidden">
+          <div class="gps-field-group">
+            <label for="input-direccion-editable"><i class="fa-solid fa-check-circle"></i> Ubicación del Reclamo (Luján de Cuyo):</label>
+            <input type="text" id="input-direccion-editable" class="input-inline" placeholder="Hacé clic dentro del área delimitada...">
+          </div>
+          <div id="mapa-container" class="mapa-box"></div>
+        </div>
+      </div>
+
+      <div class="step-box">
+        <label class="btn btn-upload">
+          <i class="fa-solid fa-image"></i> Seleccionar / Tomar Foto de la Falla
+          <input type="file" id="input-foto" accept="image/*" hidden disabled>
+        </label>
+        <div id="preview-box" class="preview-box hidden">
+          <img id="img-preview" src="" alt="Vista previa">
+        </div>
+      </div>
+
+      <button id="btn-analizar" class="btn btn-accent hidden"><i class="fa-solid fa-wand-magic-sparkles"></i> Analizar Falla con IA</button>
+    </section>
+
+    <!-- PANTALLA 3: ANÁLISIS DE IA Y CONFIRMACIÓN -->
+    <section id="sec-ia" class="card hidden">
+      <h2><i class="fa-solid fa-microchip"></i> Procesamiento por Agentes de IA</h2>
+
+      <div class="ai-pipeline">
+        <div class="ai-box">
+          <h3><i class="fa-solid fa-eye"></i> VisionAgent</h3>
+          <p>Detección visual: <strong id="ia-tipo">Bache en Calzada</strong> (Confianza: <span id="ia-score">94%</span>)</p>
+        </div>
+
+        <div class="ai-box">
+          <h3><i class="fa-solid fa-robot"></i> IncidentLLMAgent</h3>
+          <p>Categoría sugerida: <strong id="ia-area">Obras Públicas / Vialidad</strong></p>
+        </div>
+
+        <div class="ai-box">
+          <h3><i class="fa-solid fa-map-pin"></i> DeduplicationAgent</h3>
+          <p>Chequeo geoespacial (&lt;15m): <strong id="ia-dedup" class="tag-ok">Sin duplicados en la zona</strong></p>
+        </div>
+      </div>
+
+      <hr>
+
+      <h3><i class="fa-solid fa-user-shield"></i> Revisión y Confirmación Ciudadana (Punto A)</h3>
+      <p class="subtitle">Revisá y editá la descripción antes de firmar y enviar el reclamo.</p>
+
+      <form id="form-confirmar">
+        <div class="form-group">
+          <label for="input-desc">Descripción del Reclamo (Generada por LLM - Modificable)</label>
+          <textarea id="input-desc" rows="3" required></textarea>
+        </div>
+
+        <div class="btn-group">
+          <button type="submit" class="btn btn-success"><i class="fa-solid fa-paper-plane"></i> Confirmar y Enviar Reclamo</button>
+          <button type="button" id="btn-cancelar" class="btn btn-danger"><i class="fa-solid fa-xmark"></i> Descartar</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
