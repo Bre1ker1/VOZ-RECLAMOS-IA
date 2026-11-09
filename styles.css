@@ -12,10 +12,10 @@ body {
   padding-bottom: 40px;
 }
 
-/* NAVBAR Y LOGO */
+/* NAVBAR Y LOGO ADAPTADO */
 .navbar {
   background: #1e293b;
-  padding: 14px 24px;
+  padding: 12px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -29,10 +29,18 @@ body {
 }
 
 .app-logo {
-  height: 38px;
+  height: 44px;
   width: auto;
   object-fit: contain;
-  border-radius: 6px;
+  border-radius: 8px;
+  background-color: #ffffff;
+  padding: 4px 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s ease;
+}
+
+.app-logo:hover {
+  transform: scale(1.03);
 }
 
 .logo-icon {
@@ -72,23 +80,259 @@ body {
 }
 
 .container {
-  max-width: 750px;
-  margin: 30px auto;
+  margin: 20px auto;
   padding: 0 16px;
+}
+
+.container-wide {
+  max-width: 1200px;
 }
 
 .card {
   background: #1e293b;
   border: 1px solid #334155;
-  border-radius: 16px;
-  padding: 24px;
+  border-radius: 12px;
+  padding: 20px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.card-centered {
+  max-width: 750px;
+  margin: 0 auto;
 }
 
 .hidden { display: none !important; }
 .active { display: block; }
 
-/* TABS DE AUTENTICACIÓN */
+/* CAJA DE BÚSQUEDA EXTERNA */
+.search-external-box {
+  background: #0f172a;
+  border: 1px solid #0284c7;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+}
+
+.search-external-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.search-external-header i {
+  font-size: 20px;
+  color: #38bdf8;
+}
+
+.search-external-header h3 {
+  font-size: 15px;
+  color: #f8fafc;
+}
+
+.search-external-form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.search-external-form input {
+  flex: 1;
+  min-width: 260px;
+  padding: 8px 12px !important;
+  font-size: 13px !important;
+  border-radius: 6px !important;
+}
+
+/* BARRA SUPERIOR TABLA */
+.table-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #334155;
+}
+
+.badge-count {
+  background: #0284c7;
+  color: white;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 13px;
+  margin-left: 6px;
+}
+
+.btn-sm-action {
+  width: auto;
+  padding: 7px 14px;
+  font-size: 13px;
+}
+
+/* ESTILO TABLA DASHBOARD MUNICIPAL */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #008080;
+}
+
+.incident-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #f8fafc;
+  color: #1e293b;
+  font-size: 13px;
+}
+
+.incident-table th {
+  background-color: #008b8b;
+  color: #ffffff;
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 700;
+  white-space: nowrap;
+  border: 1px solid #007777;
+}
+
+.incident-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: middle;
+}
+
+.incident-table tbody tr {
+  transition: background 0.2s;
+}
+
+.incident-table tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+.td-nro {
+  background-color: #ff9999;
+  color: #990000;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* BOTÓN TICKET EN TABLA */
+.btn-ticket-nro {
+  background: #ef4444;
+  color: #ffffff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 800;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-ticket-nro:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(220, 38, 38, 0.6);
+}
+
+.btn-ticket-nro:active {
+  transform: translateY(0);
+}
+
+.thumb-mini {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #cbd5e1;
+}
+
+.thumb-placeholder {
+  width: 44px;
+  height: 44px;
+  background: #e2e8f0;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  border-radius: 4px;
+}
+
+.badge-rank-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #ff5252;
+  color: white;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.td-actions {
+  white-space: nowrap;
+}
+
+.btn-icon-action {
+  background: transparent;
+  border: none;
+  color: #008b8b;
+  cursor: pointer;
+  font-size: 14px;
+  margin-right: 8px;
+  transition: color 0.2s;
+}
+
+.btn-icon-action:hover {
+  color: #0284c7;
+}
+
+.btn-icon-action.btn-check {
+  color: #64748b;
+}
+
+.btn-icon-action.btn-check.apoyado {
+  color: #16a34a;
+}
+
+/* CAJA DE DETALLE / MAPA */
+.card-map-detail {
+  margin-top: 16px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.btn-close-sm {
+  background: #334155;
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+/* FORMULARIO Y TABS */
 .auth-tabs {
   display: flex;
   gap: 10px;
@@ -114,7 +358,7 @@ body {
 }
 
 h2 {
-  font-size: 22px;
+  font-size: 20px;
   color: #f8fafc;
   margin-bottom: 8px;
   display: flex;
@@ -188,31 +432,59 @@ input:focus, textarea:focus {
 
 .btn-sm { padding: 6px 12px; font-size: 12px; width: auto; }
 
-/* ESTILOS BOTÓN DE APOYO (UPVOTE) */
+/* BOTÓN DE APOYO VECINAL */
 .btn-apoyar {
-  background: rgba(56, 189, 248, 0.15);
-  color: #38bdf8;
-  border: 1px solid rgba(56, 189, 248, 0.4);
-  padding: 6px 14px;
+  background: #0284c7;
+  color: #ffffff;
+  border: none;
+  padding: 6px 12px;
   border-radius: 6px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  margin-top: 6px;
 }
 
 .btn-apoyar:hover {
-  background: #0284c7;
-  color: #ffffff;
+  background: #0369a1;
 }
 
 .btn-apoyar.apoyado {
   background: #16a34a;
   color: #ffffff;
-  border-color: #22c55e;
+}
+
+/* CAJA DE ALERTA RECLAMOS SIMILARES */
+.similares-alert-box {
+  background: rgba(234, 179, 8, 0.1);
+  border: 1px solid #eab308;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.similares-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #facc15;
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.card-similar-item {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .step-box { margin-bottom: 16px; }
@@ -242,19 +514,11 @@ input:focus, textarea:focus {
 
 /* MAPA INTERACTIVO */
 .mapa-box {
-  height: 250px;
-  width: 100%;
-  margin-top: 10px;
-  border-radius: 8px;
-  border: 2px solid #7c3aed;
-  z-index: 1;
-}
-
-.mapa-box-lg {
   height: 320px;
   width: 100%;
+  margin-top: 10px;
   border-radius: 12px;
-  border: 2px solid #0284c7;
+  border: 2px solid #7c3aed;
   z-index: 1;
 }
 
@@ -301,54 +565,7 @@ hr {
   gap: 10px;
 }
 
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.reclamo-card {
-  background: #0f172a;
-  border: 1px solid #334155;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 16px;
-}
-
-.reclamo-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-
-.reclamo-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 12px;
-}
-
-.badge-status {
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 700;
-  background: rgba(2, 132, 199, 0.2);
-  color: #38bdf8;
-}
-
-.badge-vecino {
-  background: rgba(124, 58, 237, 0.2);
-  color: #c084fc;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 11px;
-  margin-left: 6px;
-}
-
 .hash-box {
-  margin-top: 10px;
   padding: 8px 10px;
   background: rgba(124, 58, 237, 0.15);
   border: 1px solid rgba(124, 58, 237, 0.4);

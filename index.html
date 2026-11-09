@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Voz Reclamos IA - Prototipo Vecino</title>
+  <title>Voz Reclamos IA - Godoy Cruz</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- CSS del Mapa Interactivo Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
-  <!-- Header / Navbar -->
+  <!-- Header / Navbar con Logo Integrado -->
   <header class="navbar">
     <div class="logo-container">
       <img src="logo.png" alt="Logo Voz Reclamos" class="app-logo" id="app-logo-img" onerror="this.style.display='none'; document.getElementById('logo-placeholder-icon').style.display='inline-block';">
@@ -18,16 +18,15 @@
       <span class="brand-name">Voz <strong>Reclamos</strong> <small class="ai-tag">IA</small></span>
     </div>
     <div class="user-status" id="user-status">
-      <button id="btn-ver-mis-reclamos" class="btn-sm btn-secondary hidden"><i class="fa-solid fa-user"></i> Mis Reclamos</button>
-      <button id="btn-ver-comunidad" class="btn-sm btn-secondary hidden"><i class="fa-solid fa-earth-americas"></i> Reclamos Vecinales</button>
+      <button id="btn-ver-mis-reclamos" class="btn-sm btn-secondary hidden"><i class="fa-solid fa-table-list"></i> Mis Reclamos</button>
       <span id="user-display"><i class="fa-solid fa-user-circle"></i> No autenticado</span>
       <button id="btn-logout" class="btn-sm hidden"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
     </div>
   </header>
 
-  <main class="container">
+  <main class="container container-wide">
     <!-- PANTALLA 1: AUTENTICACIÓN -->
-    <section id="sec-auth" class="card active">
+    <section id="sec-auth" class="card active card-centered">
       <div class="auth-tabs">
         <button id="tab-login" class="btn-tab active"><i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión</button>
         <button id="tab-register" class="btn-tab"><i class="fa-solid fa-user-plus"></i> Registrarse</button>
@@ -35,7 +34,7 @@
 
       <form id="form-login" class="auth-form">
         <h2><i class="fa-solid fa-user-check"></i> Acceso de Vecino</h2>
-        <p class="subtitle">Ingresá con tu DNI para gestionar y apoyar reclamos.</p>
+        <p class="subtitle">Ingresá con tu DNI para gestionar y consultar tus reclamos en Godoy Cruz.</p>
         <div class="form-group">
           <label for="login-dni">DNI (Número de Documento)</label>
           <input type="number" id="login-dni" placeholder="Ej: 46868103" required>
@@ -70,71 +69,102 @@
       </form>
     </section>
 
-    <!-- PANTALLA PRINCIPAL: MIS RECLAMOS -->
+    <!-- PANTALLA PRINCIPAL: MIS RECLAMOS + CAJA DE BÚSQUEDA DE RECLAMO EXTERNO -->
     <section id="sec-historial" class="card hidden">
-      <div class="section-header">
-        <h2><i class="fa-solid fa-list-check"></i> Mis Reclamos Registrados</h2>
-        <button id="btn-nuevo" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Crear Otro Reclamo</button>
-      </div>
-
-      <div id="lista-reclamos" class="reclamos-list">
-        <!-- Cargados dinámicamente -->
-      </div>
-    </section>
-
-    <!-- PANTALLA: RECLAMOS DE OTROS VECINOS EN LUJÁN DE CUYO CON BOTÓN DE APOYO -->
-    <section id="sec-comunidad" class="card hidden">
-      <div class="section-header">
-        <h2><i class="fa-solid fa-earth-americas"></i> Reclamos Vecinales en Luján de Cuyo</h2>
-      </div>
-      <p class="subtitle">Explorá los reclamos de otros vecinos y sumá tu apoyo para darle prioridad comunitaria.</p>
       
-      <!-- Contenedor del Mapa Comunitario -->
-      <div id="mapa-comunidad-container" class="mapa-box-lg"></div>
-
-      <div id="lista-comunidad" class="reclamos-list" style="margin-top: 20px;">
-        <!-- Reclamos globales cargados dinámicamente -->
-      </div>
-    </section>
-
-    <!-- PANTALLA 2: NUEVO RECLAMO Y MAPA -->
-    <section id="sec-crear" class="card hidden">
-      <h2><i class="fa-solid fa-camera"></i> Nuevo Reclamo Vecinal</h2>
-      <p class="subtitle">Marcá la falla únicamente dentro del perímetro delineado de Luján de Cuyo.</p>
-
-      <div class="step-box">
-        <button id="btn-gps" class="btn btn-secondary"><i class="fa-solid fa-map-location-dot"></i> Cargar Jurisdicción Luján de Cuyo</button>
-        
-        <div id="gps-info" class="info-badge hidden">
-          <div class="gps-field-group">
-            <label for="input-direccion-editable"><i class="fa-solid fa-check-circle"></i> Ubicación del Reclamo (Luján de Cuyo):</label>
-            <input type="text" id="input-direccion-editable" class="input-inline" placeholder="Hacé clic dentro del área delimitada...">
+      <!-- MÓDULO DE BÚSQUEDA DE RECLAMO EXTERNO (DNI O N° TICKET) -->
+      <div class="search-external-box">
+        <div class="search-external-header">
+          <i class="fa-solid fa-magnifying-glass-location"></i>
+          <div>
+            <h3>Consultar Reclamo por DNI o N° de Ticket</h3>
+            <p style="font-size: 12px; color: #94a3b8;">Probá buscando el DNI <strong>38920112</strong> o Ticket <strong>51204891</strong> para ver el reclamo de otro vecino.</p>
           </div>
-          <div id="mapa-container" class="mapa-box"></div>
+        </div>
+        <div class="search-external-form">
+          <input type="text" id="input-buscar-externo" placeholder="Ej: DNI (38920112) o N° Ticket (51204891)...">
+          <button id="btn-buscar-externo" class="btn btn-secondary btn-sm-action"><i class="fa-solid fa-magnifying-glass"></i> Buscar</button>
+          <button id="btn-limpiar-busqueda" class="btn btn-sm-action hidden" style="background: #475569; color: white;"><i class="fa-solid fa-rotate-left"></i> Volver a Mis Reclamos</button>
         </div>
       </div>
+
+      <div class="table-top-bar">
+        <div class="table-title">
+          <h2 id="titulo-tabla-incidentes"><i class="fa-solid fa-user-large"></i> Mis Reclamos Registrados <span id="cant-incidentes-badge" class="badge-count">0</span></h2>
+        </div>
+        <div>
+          <button id="btn-nuevo" class="btn btn-primary btn-sm-action"><i class="fa-solid fa-plus"></i> Nuevo Reclamo</button>
+        </div>
+      </div>
+
+      <!-- TABLA ESTILO DASHBOARD MUNICIPAL INMUTABLE -->
+      <div class="table-responsive">
+        <table class="incident-table">
+          <thead>
+            <tr>
+              <th>Foto</th>
+              <th>Nro</th>
+              <th>Fecha alta</th>
+              <th>Área</th>
+              <th>Tipo</th>
+              <th>Creado por</th>
+              <th>Estado</th>
+              <th>Dirección</th>
+              <th>Barrio</th>
+              <th>Observaciones</th>
+              <th>Rank</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-tbody-incidentes">
+            <!-- Cargado dinámicamente -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- CONTENEDOR DE DETALLE / MAPA EMBEBIDO -->
+      <div id="detalle-mapa-reclamo-box" class="card-map-detail hidden">
+        <div class="detail-header">
+          <h3 id="detail-ticket-id"><i class="fa-solid fa-map-location-dot"></i> Vista Geoespacial del Incidente</h3>
+          <button id="btn-cerrar-detalle-mapa" class="btn-close-sm"><i class="fa-solid fa-xmark"></i> Cerrar Mapa</button>
+        </div>
+        <p id="detail-ticket-dir" class="subtitle" style="margin-bottom: 10px;"></p>
+        <div id="mapa-historial-embebido" style="height: 220px; width: 100%; border-radius: 8px; border: 1px solid #334155;"></div>
+        <div id="detail-ticket-hash" class="hash-box" style="margin-top: 10px;"></div>
+      </div>
+    </section>
+
+    <!-- PASO 1: SUBIR FOTO DE LA FALLA -->
+    <section id="sec-crear" class="card card-centered hidden">
+      <h2><i class="fa-solid fa-camera"></i> Nuevo Reclamo Vecinal</h2>
+      <p class="subtitle">Paso 1: Capturá o seleccioná una foto de la incidencia para comenzar.</p>
 
       <div class="step-box">
         <label class="btn btn-upload">
           <i class="fa-solid fa-image"></i> Seleccionar / Tomar Foto de la Falla
-          <input type="file" id="input-foto" accept="image/*" hidden disabled>
+          <input type="file" id="input-foto" accept="image/*" hidden>
         </label>
         <div id="preview-box" class="preview-box hidden">
           <img id="img-preview" src="" alt="Vista previa">
         </div>
       </div>
 
-      <button id="btn-analizar" class="btn btn-accent hidden"><i class="fa-solid fa-wand-magic-sparkles"></i> Analizar Falla con IA</button>
+      <div class="btn-group" style="margin-top: 16px;">
+        <button id="btn-analizar" class="btn btn-accent hidden"><i class="fa-solid fa-wand-magic-sparkles"></i> Analizar Falla y Continuar</button>
+        <button id="btn-cancelar-paso1" class="btn btn-danger"><i class="fa-solid fa-arrow-left"></i> Volver sin Crear</button>
+      </div>
     </section>
 
-    <!-- PANTALLA 3: ANÁLISIS DE IA Y CONFIRMACIÓN -->
-    <section id="sec-ia" class="card hidden">
-      <h2><i class="fa-solid fa-microchip"></i> Procesamiento por Agentes de IA</h2>
+    <!-- PASO 2 Y 3: ANÁLISIS DE IA, PRIVACIDAD, UBICACIÓN Y CONFIRMACIÓN -->
+    <section id="sec-ia" class="card card-centered hidden">
+      <h2><i class="fa-solid fa-microchip"></i> Procesamiento y Ubicación del Reclamo</h2>
 
+      <!-- ANÁLISIS AUTOMÁTICO DE IA -->
       <div class="ai-pipeline">
         <div class="ai-box">
           <h3><i class="fa-solid fa-eye"></i> VisionAgent</h3>
           <p>Detección visual: <strong id="ia-tipo">Bache en Calzada</strong> (Confianza: <span id="ia-score">94%</span>)</p>
+          <small class="tag-ok" style="font-size: 11px;"><i class="fa-solid fa-user-shield"></i> Privacidad: Rostros y patentes anonimizadas (Blur-filter)</small>
         </div>
 
         <div class="ai-box">
@@ -144,24 +174,51 @@
 
         <div class="ai-box">
           <h3><i class="fa-solid fa-map-pin"></i> DeduplicationAgent</h3>
-          <p>Chequeo geoespacial (&lt;15m): <strong id="ia-dedup" class="tag-ok">Sin duplicados en la zona</strong></p>
+          <p>Análisis de duplicados: <strong id="ia-dedup" class="tag-ok">Verificando en mapa</strong></p>
         </div>
+      </div>
+
+      <!-- DESCRIPCIÓN GENERADA POR IA -->
+      <div class="form-group">
+        <label for="input-desc"><i class="fa-solid fa-pen-to-square"></i> Descripción Sugerida por IA (Modificable antes de enviar)</label>
+        <textarea id="input-desc" rows="3" required></textarea>
       </div>
 
       <hr>
 
-      <h3><i class="fa-solid fa-user-shield"></i> Revisión y Confirmación Ciudadana (Punto A)</h3>
-      <p class="subtitle">Revisá y editá la descripción antes de firmar y enviar el reclamo.</p>
+      <!-- PASO DE UBICACIÓN Y MAPA CON RADIO DE CERCANÍA -->
+      <h3><i class="fa-solid fa-map-location-dot"></i> Definir Ubicación en Godoy Cruz</h3>
+      <p class="subtitle">Marcá el punto en el mapa o ingresá la dirección exacta para consultar reclamos cercanos (400m).</p>
 
-      <form id="form-confirmar">
-        <div class="form-group">
-          <label for="input-desc">Descripción del Reclamo (Generada por LLM - Modificable)</label>
-          <textarea id="input-desc" rows="3" required></textarea>
+      <div class="step-box">
+        <button id="btn-gps" class="btn btn-secondary"><i class="fa-solid fa-crosshairs"></i> Cargar Mi Ubicación Actual</button>
+        
+        <div id="gps-info" class="info-badge hidden">
+          <div class="gps-field-group">
+            <label for="input-direccion-editable"><i class="fa-solid fa-check-circle"></i> Dirección del Reclamo:</label>
+            <input type="text" id="input-direccion-editable" class="input-inline" placeholder="Ej: San Martín 500, Godoy Cruz...">
+          </div>
+          <div id="mapa-container" class="mapa-box"></div>
         </div>
+      </div>
 
+      <!-- ALERTA DE RECLAMOS CERCANOS SIMILARES -->
+      <div id="box-reclamos-similares" class="similares-alert-box hidden">
+        <div class="similares-header">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <h4>Reclamos parecidos cerca de tu ubicación</h4>
+        </div>
+        <p class="subtitle" style="margin-bottom: 10px; color: #cbd5e1;">Si la falla ya fue reportada, podés apoyar la existente para darle más prioridad:</p>
+        <div id="lista-similares-ia"></div>
+      </div>
+
+      <hr>
+
+      <!-- FORMULARIO FINAL DE CONFIRMACIÓN -->
+      <form id="form-confirmar">
         <div class="btn-group">
           <button type="submit" class="btn btn-success"><i class="fa-solid fa-paper-plane"></i> Confirmar y Enviar Reclamo</button>
-          <button type="button" id="btn-cancelar" class="btn btn-danger"><i class="fa-solid fa-xmark"></i> Descartar</button>
+          <button type="button" id="btn-cancelar" class="btn btn-danger"><i class="fa-solid fa-xmark"></i> Descartar y Cancelar</button>
         </div>
       </form>
     </section>
